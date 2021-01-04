@@ -1,8 +1,10 @@
 // import type {ShaderPass} from '../../lib/shader-pass-descriptor';
 
 const fs = `\
-uniform float hue;
-uniform float saturation;
+uniform HueSaturation {
+  float hue;
+  float saturation;
+};
 
 vec4 hueSaturation_filterColor(vec4 color) {
   // hue adjustment, wolfram alpha: RotationTransform[angle, {1, 1, 1}][{x, y, z}]

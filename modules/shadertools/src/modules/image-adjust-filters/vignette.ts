@@ -1,8 +1,10 @@
 // import type {ShaderPass} from '../../lib/shader-pass-descriptor';
 
 const fs = `\
-uniform float radius;
-uniform float amount;
+uniform Vignette {
+  float radius;
+  float amount;
+};
 
 vec4 vignette_filterColor(vec4 color, vec2 texCoord) {
   float dist = distance(texCoord, vec2(0.5, 0.5));

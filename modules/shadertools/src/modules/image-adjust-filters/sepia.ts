@@ -1,7 +1,9 @@
 // import type {ShaderPass} from '../../lib/shader-pass-descriptor';
 
 const fs = `\
-uniform float amount;
+uniform Sepia {
+  float amount;
+};
 
 vec4 sepia_filterColor(vec4 color) {
   float r = color.r;

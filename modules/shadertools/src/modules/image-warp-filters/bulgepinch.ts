@@ -3,9 +3,11 @@
 import {warp} from './warp';
 
 const fs = `\
-uniform float radius;
-uniform float strength;
-uniform vec2 center;
+uniform BulgePinch {
+  float radius;
+  float strength;
+  vec2 center;
+};
 
 vec2 bulgePinch_warp(vec2 coord, vec2 texCenter) {
   coord -= texCenter;

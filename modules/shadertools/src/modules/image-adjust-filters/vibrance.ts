@@ -1,7 +1,9 @@
 // import type {ShaderPass} from '../../lib/shader-pass-descriptor';
 
 const fs = `\
-uniform float amount;
+uniform Vibrance {
+  float amount;
+};
 
 vec4 vibrance_filterColor(vec4 color) {
   float average = (color.r + color.g + color.b) / 3.0;

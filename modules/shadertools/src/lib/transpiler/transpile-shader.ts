@@ -75,6 +75,20 @@ const ES100_FRAGMENT_OUTPUT_NAME: string = 'gl_FragColor';
 const ES300_FRAGMENT_OUTPUT_REGEX: RegExp = /\bout[ \t]+vec4[ \t]+(\w+)[ \t]*;\n?/;
 const REGEX_START_OF_MAIN: RegExp = /void\s+main\s*\([^)]*\)\s*\{\n?/; // Beginning of main
 
+// uniform BrightnessContrast {
+//  float brightness;
+//  float contrast;
+//} brightnessContrast;
+// => $1=BrightnessContrast, $2=float brightness; float contrast;) $3=brightnessContrast;
+
+const UNIFORM_BLOCK_REGEX = /.*uniform\s+(\S+)\s+{([\s\S]*?)}\s*(.*?);/gm;
+
+const UNIFORM_BLOCK_TO_GLSL100 = (matches, BlockName, members, instanceName) => {
+  const transpiled = members.replace(/(.*?);/gm, 'uniform $1;');
+  console.error(transpiled);
+  return transpiled;
+}
+
 function convertShader(source: string, replacements: GLSLReplacement[]) {
   for (const [pattern, replacement] of replacements) {
     source = source.replace(pattern, replacement);
@@ -103,12 +117,15 @@ function convertFragmentShaderTo300(source: string): string {
 /** Transform fragment shader source code to GLSL ES 100 */
 function convertFragmentShaderTo100(source: string): string {
   source = convertShader(source, ES100_FRAGMENT_REPLACEMENTS);
+  // Uniform block processing
+  source = source.replace(UNIFORM_BLOCK_REGEX, UNIFORM_BLOCK_TO_GLSL100)
 
   const outputMatch = source.match(ES300_FRAGMENT_OUTPUT_REGEX);
   if (outputMatch) {
     const outputName = outputMatch[1];
     source = source
       .replace(ES300_FRAGMENT_OUTPUT_REGEX, '')
+      // gl_FragColor
       .replace(new RegExp(`\\b${outputName}\\b`, 'g'), ES100_FRAGMENT_OUTPUT_NAME);
   }
 

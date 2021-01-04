@@ -1,7 +1,9 @@
 // import type {ShaderPass} from '../../lib/shader-pass-descriptor';
 
 const fs = `\
-uniform float amount;
+uniform Noise {
+  float amount;
+};
 
 float rand(vec2 co) {
   return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
