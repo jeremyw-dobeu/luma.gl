@@ -1,4 +1,5 @@
 // luma.gl, MIT license
+import {Device} from '@luma.gl/api';
 import GL from '@luma.gl/constants';
 import {isWebGL} from '@luma.gl/gltools';
 import {ProgramProps} from '@luma.gl/webgl';
@@ -102,8 +103,10 @@ interface TransformOpts extends DrawOpts {
 */
 
 export default class Model {
-  readonly id: string;
+  readonly device: Device;
   readonly gl: WebGLRenderingContext;
+
+  readonly id: string;
   readonly animated: boolean = false;
   programManager: ProgramManager;
   vertexCount: number;
@@ -136,9 +139,13 @@ export default class Model {
   // TODO - just to unbreak deck.gl 7.0-beta, remove as soon as updated
   geometry = {};
 
+  constructor(device: Device, props?: ModelProps);
+  /* @deprecated */
+  constructor(gl: WebGLRenderingContext, props?: ModelProps);
   constructor(gl, props: ModelProps = {}) {
     // Deduce a helpful id
     const {id = uid('model')} = props;
+    gl = gl.gl || gl;
     assert(isWebGL(gl));
     this.id = id;
     this.gl = gl;

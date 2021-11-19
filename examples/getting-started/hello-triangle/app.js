@@ -1,5 +1,5 @@
-import {AnimationLoop, Model} from '@luma.gl/engine';
-import {Buffer, clear} from '@luma.gl/webgl';
+import {AnimationLoop, AnimationProps, Model} from '@luma.gl/engine';
+import {clear} from '@luma.gl/webgl';
 
 const INFO_HTML = `
 Have to start somewhere...
@@ -14,13 +14,10 @@ export default class AppAnimationLoop extends AnimationLoop {
     return INFO_HTML;
   }
 
-  onInitialize({gl}) {
-    const positionBuffer = new Buffer(gl, new Float32Array([-0.5, -0.5, 0.5, -0.5, 0.0, 0.5]));
-
-    const colorBuffer = new Buffer(
-      gl,
-      new Float32Array([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0])
-    );
+  /** @param {AnimationProps} */
+  onInitialize({device}) {
+    const positionBuffer = device.createBuffer(new Float32Array([-0.5, -0.5, 0.5, -0.5, 0.0, 0.5]));
+    const colorBuffer = device.createBuffer(new Float32Array([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]));
 
     const vs = `
       attribute vec2 position;
@@ -42,7 +39,7 @@ export default class AppAnimationLoop extends AnimationLoop {
       }
     `;
 
-    const model = new Model(gl, {
+    const model = new Model(device, {
       vs,
       fs,
       attributes: {
@@ -55,13 +52,13 @@ export default class AppAnimationLoop extends AnimationLoop {
     return {model};
   }
 
-  onRender({gl, model}) {
-    clear(gl, {color: [0, 0, 0, 1]});
+  onRender({device, model}) {
+    clear(device.gl, {color: [0, 0, 0, 1]});
     model.draw();
   }
 
   onFinalize({model}) {
-    model.delete();
+    model.destroy();
   }
 }
 
