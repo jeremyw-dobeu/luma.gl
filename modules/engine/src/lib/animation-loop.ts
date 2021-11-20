@@ -4,8 +4,8 @@ type DeviceProps = GLContextOptions;
 
 import {
   isWebGL,
-  createGLContext,
-  instrumentGLContext,
+  // createGLContext,
+  // instrumentGLContext,
   resizeGLContext,
   resetParameters
 } from '@luma.gl/gltools';
@@ -88,10 +88,14 @@ export type AnimationProps = {
   framebuffer: Framebuffer
   /** @deprecated Use .device */
   gl: WebGLRenderingContext
+
+  // Any fields returned from init function
+  [key: string]: unknown;
 }
 
 const DEFAULT_ANIMATION_LOOP_PROPS: Required<AnimationLoopProps> = {
-  onCreateDevice: (props) => luma.createDevice(props),
+  onCreateDevice: (props: DeviceProps) => luma.createDevice(props),
+  onCreateContext: null,
   onAddHTML: null,
   onInitialize: () => ({}),
   onRender: () => {},
@@ -108,7 +112,7 @@ const DEFAULT_ANIMATION_LOOP_PROPS: Required<AnimationLoopProps> = {
   stats: lumaStats.get(`animation-loop-${statIdCounter++}`),
 
   // deprecated
-  onCreateContext: (opts) => createGLContext(opts),
+  // onCreateContext: (opts) => createGLContext(opts),
   gl: null,
   glOptions: {},
   createFramebuffer: false
@@ -162,7 +166,7 @@ export default class AnimationLoop {
     // state
     this.device = props.device;
     // @ts-expect-error
-    this.gl = this.device?.gl || props.gl;
+    this.gl = (this.device && this.device.gl) || props.gl;
 
     this.stats = props.stats;
     this.cpuTime = this.stats.get('CPU Time');
@@ -560,10 +564,14 @@ export default class AnimationLoop {
   /** Either uses supplied or existing context, or calls provided callback to create one */
   _createDevice(props: DeviceProps) {
     const deviceProps = {...props, ...this.props.glOptions};
-    this.device = luma.createDevice(deviceProps);
 
+    // TODO - support this.onCreateContext
     // Create the WebGL context if necessary
-    this.gl = this.props.gl ? instrumentGLContext(this.props.gl, opts) : this.onCreateContext(opts);
+    // this.gl = this.props.gl ? instrumentGLContext(this.props.gl, deviceProps) : this.onCreateContext(deviceProps);
+
+    this.device = this.onCreateDevice(deviceProps);
+    // @ts-expect-error
+    this.gl = this.device.gl;
 
     if (!isWebGL(this.gl)) {
       throw new Error('AnimationLoop.onCreateContext - illegal context returned');

@@ -32,9 +32,22 @@ const NOOP = () => {};
 const DRAW_PARAMS = {};
 
 export type ModelProps = ProgramProps & {
-  id?: string
+  id?: string;
+
+  // program props
+  // vs,
+  // fs,
+  // varyings,
+  // bufferMode,
+
+  program?: Program;
+  modules?: any[];
+  defines?: Record<string, number | boolean>;
+  inject?: Record<string, any>;
+  transpileToGLSL100?: boolean;
+
   moduleSettings?: object; // UniformsOptions
-  attributes?: object,
+  attributes?: object;
   uniforms?: object; // Uniforms
   geometry?: object; // Geometry
   vertexCount?: number
@@ -153,7 +166,7 @@ export default class Model {
     this.initialize(props);
   }
 
-  initialize(props) {
+  initialize(props: ModelProps) {
     this.props = {};
 
     this.programManager = props.programManager || ProgramManager.getDefaultProgramManager(this.gl);
@@ -233,7 +246,7 @@ export default class Model {
     this._setModelProps(props);
   }
 
-  delete() {
+  destroy(): void {
     // delete all attributes created by this model
     // TODO - should buffer deletes be handled by vertex array?
     for (const key in this._attributes) {
@@ -250,6 +263,11 @@ export default class Model {
     this.vertexArray.delete();
 
     this._deleteGeometryBuffers();
+  }
+
+  /** @deprecated Use .destroy() */
+  delete(): void {
+    this.destroy();
   }
 
   // GETTERS

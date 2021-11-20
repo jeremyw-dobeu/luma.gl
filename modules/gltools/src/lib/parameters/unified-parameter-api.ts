@@ -1,7 +1,7 @@
 // Provides a unified API for getting and setting any WebGL parameter
 // Also knows default values of all parameters, enabling fast cache initialization
 // Provides base functionality for the state caching.
-import {GLParameters} from './webgl-parameters';
+import type {GLParameters} from './webgl-parameters';
 import {
   GL_PARAMETER_DEFAULTS,
   GL_PARAMETER_SETTERS,
@@ -12,7 +12,7 @@ import {
 import {assert} from '../utils/assert';
 import {isWebGL} from '../context/webgl-checks';
 
-export {GLParameters};
+export type {GLParameters};
 
 /**
  * Sets any GL parameter regardless of function (gl.blendMode, ...)

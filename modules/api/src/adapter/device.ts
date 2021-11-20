@@ -44,6 +44,8 @@ export type DeviceLimits = {
   readonly maxComputeWorkgroupsPerDimension?: number;
 };
 
+export type DeviceProps = {};
+
 /**
  * WebGPU Device/WebGL context abstraction
  */

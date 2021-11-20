@@ -1,5 +1,6 @@
 // luma.gl, MIT license
 import GL from '@luma.gl/constants';
+import {Device} from '@luma.gl/api';
 import {log} from './utils/log';
 import {getDeviceFeatures} from './device/get-webgpu-features';
 import {getDeviceLimits} from './device/get-webgpu-limits';
@@ -72,7 +73,7 @@ export function getWebGLDevice(gl: WebGLRenderingContext | WebGL2RenderingContex
 let counter = 0;
 
 /** WebGPU style Device API for a WebGL context */
-export default class WebGLDevice implements ContextState {
+export default class WebGLDevice extends Device implements ContextState {
   // WebGPU style API
 
   /** A set like interface to test features */
@@ -120,6 +121,8 @@ export default class WebGLDevice implements ContextState {
   }
 
   constructor(props: WebGLDeviceProps) {
+    super();
+    
     this.props = {...DEFAULT_DEVICE_PROPS, ...props};
 
     // If attaching to an already attached context, return the attached device
