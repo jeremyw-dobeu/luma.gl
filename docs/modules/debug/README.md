@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # @luma.gl/debug
 
 > Warning: WebGL debug contexts impose a significant performance penalty (due to waiting for the GPU after each WebGL call to check error codes) and should not be used in production builds.
@@ -15,6 +16,25 @@ const gl = createGLContext(gl, {debug: true});
 ```
 
 If the debug tools haven't been imported, both funcitons will print a warning and simply return the original context, so the debug code can be left in the applicatin even when debug support is not imported.
+=======
+# Overview
+
+> WebGL only
+
+luma.gl is pre-integrated with the Khronos group's WebGL debug tools (the [WebGLDeveloperTools](https://github.com/KhronosGroup/WebGLDeveloperTools)) and can use these to "instrument" `WebGLRenderingContext`s.
+
+> Warning: WebGL debug contexts impose a significant performance penalty (due to waiting for the GPU after each WebGL call to check error codes) and should not be used in production builds.
+
+To use debug support, first import the debug tools, then call [`createDevice`](/docs/api-reference/gltools/context) with `debug: true` to create a debug context:
+
+```js
+import {luma} from '@luma.gl/core';
+import '@luma.gl/debug';
+const device = luma.createDevice({type: 'webgl', debug: true});
+```
+
+If the debug tools haven't been imported, specifying the `debug` flag will print a warning and simply return the original context, so the debug code can be left in the applicatin even when debug support is not imported.
+>>>>>>> Stashed changes
 
 Debug contexts perform the following:
 
