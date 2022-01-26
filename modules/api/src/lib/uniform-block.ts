@@ -2,9 +2,8 @@
 import {assert} from '../utils/assert';
 import {log} from '../utils/log';
 import {ShaderLayout, UniformBufferBindingLayout, UniformInfo} from '../adapter/types/shader-layout';
-import UniformBufferLayout from './uniform-buffer-layout';
 
-/** A uniform block holds a number of uniforms */
+/** A uniform block holds the uniforms for one uniform buffer */
 export default class UniformBlock<TUniforms = Record<string, any>> {
   // readonly layout: UniformBufferLayout;
   readonly layout: Record<string, UniformInfo> = {};
